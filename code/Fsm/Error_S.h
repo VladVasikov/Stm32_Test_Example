@@ -13,7 +13,7 @@ class Error_S final : public m::IState {
       : IState(transitions), drivers_(drivers), settings_(settings) {}
 
   void entry() override {
-    // TODO: send error reason to remote panel
+    // TODO: log error reason
   }
 
   void run() override {}

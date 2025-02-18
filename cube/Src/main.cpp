@@ -33,13 +33,13 @@
 #include <IIO_AsyncLog.h>
 #include <MemoryPart.h>
 #include <MemoryTest.h>
+#include <PY25Q128HA.h>
 #include <Pin_F4_Wrapper.h>
 #include <SimpleErrorTracer.h>
 #include <Time_F4_Tim5.h>
 #include <Units.h>
 
 #include "Adc_1.h"
-#include "DeviceMem.h"
 #include "Drivers.h"
 #include "Error.h"
 #include "I2c_1.h"
@@ -188,9 +188,8 @@ int main(void) {
 
   m::ic::PY25Q128HA pq{spi_1, spi_1_cs, time_ms};
 
-  DeviceMem mem{pq};
-  m::MemoryPart rs485_mem{mem, 0, 256};
-  m::MemoryPart settings_mem{mem, 256, 10 * 4 * 1024};
+  m::MemoryPart rs485_mem{pq, 0, 256};
+  m::MemoryPart settings_mem{pq, 256, 10 * 4 * 1024};
 
   Settings settings{settings_mem, time_ms, tracer, log};
 

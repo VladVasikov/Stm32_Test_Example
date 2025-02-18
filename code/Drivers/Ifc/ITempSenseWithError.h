@@ -2,6 +2,8 @@
 #include <Celsius.h>
 #include <ITempSense.h>
 
+#include <optional>
+
 class ITempSenseWithError
     : public m::ifc::ITempSense<std::optional<Celsius<float>>>,
       public m::ifc::ITempSenseError {
