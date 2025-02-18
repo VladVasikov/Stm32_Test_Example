@@ -224,7 +224,7 @@ int main(void) {
   // ##################################################
   //                      RELAY
   // ##################################################
-  PinWrapper rel_1{GPIOB, Pin::PinNum::Pin_1, Pin::Mode::Output_PP};  // heater
+  PinWrapper rel_1{GPIOB, Pin::PinNum::Pin_1, Pin::Mode::Output_PP};
   PinWrapper rel_2{GPIOB, Pin::PinNum::Pin_2, Pin::Mode::Output_PP};
   PinWrapper rel_3{GPIOB, Pin::PinNum::Pin_10, Pin::Mode::Output_PP};
   PinWrapper rel_4{GPIOB, Pin::PinNum::Pin_11, Pin::Mode::Output_PP};
@@ -240,10 +240,10 @@ int main(void) {
   //                      PROTOCOL
   // ##################################################
   PinWrapper usart_4_dir{GPIOA, Pin::PinNum::Pin_15, Pin::Mode::Output_PP};
-  Usart_4 usart_4{usart_4_dir};  // Smart Home
+  Usart_4 usart_4{usart_4_dir};
 
   PinWrapper usart_5_dir{GPIOB, Pin::PinNum::Pin_3, Pin::Mode::Output_PP};
-  Usart_5 usart_5{usart_5_dir};  // Panel
+  Usart_5 usart_5{usart_5_dir};
 
   static m::ModbusRtuProtocol<Us<uint32_t>>::Callbacks modbus_callbacks;
 
@@ -490,7 +490,7 @@ int main(void) {
     log.add("Adc 1 start failed");
     tracer.add(static_cast<uint16_t>(HardwareError::Adc_1_Start));
   }
-  time_ms.delay(100_Ms);  // Wait after ADC start
+  time_ms.delay(100_Ms);  // Delay after ADC start
 
   std::function<void()> tim_7_it_cb = [&]() {
     mdbs_sh.handle();
