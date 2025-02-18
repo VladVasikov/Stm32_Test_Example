@@ -244,8 +244,6 @@ int main(void) {
   PinWrapper usart_5_dir{GPIOB, Pin::PinNum::Pin_3, Pin::Mode::Output_PP};
   Usart_5 usart_5{usart_5_dir};
 
-  static m::ModbusRtuProtocol<Us<uint32_t>>::Callbacks modbus_callbacks;
-
   // ################################
   //           Smart home
   // ################################
@@ -259,8 +257,8 @@ int main(void) {
 
   m::ModbusRtuProtocol<Us<uint32_t>>::Timings timing_sh{.tx_response_delay =
                                                             500_Us};
-  m::ModbusRtuProtocol<Us<uint32_t>> mdbs_sh{
-      data_link_sh, time_us, timing_sh, rx_buf_sh, tx_buf_sh, modbus_callbacks};
+  m::ModbusRtuProtocol<Us<uint32_t>> mdbs_sh{data_link_sh, time_us, timing_sh,
+                                             rx_buf_sh, tx_buf_sh};
 
   // ################################
   //             Panel
@@ -275,8 +273,8 @@ int main(void) {
 
   m::ModbusRtuProtocol<Us<uint32_t>>::Timings timing_p{.tx_response_delay =
                                                            500_Us};
-  m::ModbusRtuProtocol<Us<uint32_t>> mdbs_p{
-      data_link_p, time_us, timing_p, rx_buf_p, tx_buf_p, modbus_callbacks};
+  m::ModbusRtuProtocol<Us<uint32_t>> mdbs_p{data_link_p, time_us, timing_p,
+                                            rx_buf_p, tx_buf_p};
 
   // ################################
   //           Modbus read
@@ -287,68 +285,66 @@ int main(void) {
     float temp_reg = 0.0f;
 
     settings.setPanelOnline(true);
-    auto regs_copy = regs;
 
-    for (auto address = start_addr; address < start_addr + regs_num;
-         ++address) {
-      switch (address) {
+    for (auto& reg : regs) {
+      switch (start_addr) {
         case static_cast<uint16_t>(Regmap::Rel_1): {
-          regs_copy[0] = rel_1.read();
+          reg = rel_1.read();
         } break;
         case static_cast<uint16_t>(Regmap::Rel_2): {
-          regs_copy[0] = rel_2.read();
+          reg = rel_2.read();
         } break;
         case static_cast<uint16_t>(Regmap::Rel_3): {
-          regs_copy[0] = rel_3.read();
+          reg = rel_3.read();
         } break;
         case static_cast<uint16_t>(Regmap::Rel_4): {
-          regs_copy[0] = rel_4.read();
+          reg = rel_4.read();
         } break;
         case static_cast<uint16_t>(Regmap::Rel_5): {
-          regs_copy[0] = rel_5.read();
+          reg = rel_5.read();
         } break;
         case static_cast<uint16_t>(Regmap::Rel_6): {
-          regs_copy[0] = rel_6.read();
+          reg = rel_6.read();
         } break;
         case static_cast<uint16_t>(Regmap::Rel_7): {
-          regs_copy[0] = rel_7.read();
+          reg = rel_7.read();
         } break;
         case static_cast<uint16_t>(Regmap::Rel_8): {
-          regs_copy[0] = rel_8.read();
+          reg = rel_8.read();
         } break;
 
         case static_cast<uint16_t>(Regmap::Out_1): {
-          regs_copy[0] = out_1.read();
+          reg = out_1.read();
         } break;
         case static_cast<uint16_t>(Regmap::Out_2): {
-          regs_copy[0] = out_2.read();
+          reg = out_2.read();
         } break;
 
         case static_cast<uint16_t>(Regmap::In_1): {
-          regs_copy[0] = in_1.read();
+          reg = in_1.read();
         } break;
         case static_cast<uint16_t>(Regmap::In_2): {
-          regs_copy[0] = in_2.read();
+          reg = in_2.read();
         } break;
         case static_cast<uint16_t>(Regmap::In_3): {
-          regs_copy[0] = in_3.read();
+          reg = in_3.read();
         } break;
         case static_cast<uint16_t>(Regmap::In_4): {
-          regs_copy[0] = in_4.read();
+          reg = in_4.read();
         } break;
 
         case static_cast<uint16_t>(Regmap::WaterTopLevel): {
-          regs_copy[0] = el_hi.read();
+          reg = el_hi.read();
         } break;
         case static_cast<uint16_t>(Regmap::WaterBotLevel): {
-          regs_copy[0] = el_low.read();
+          reg = el_low.read();
         } break;
 
         case static_cast<uint16_t>(Regmap::Ntc_1_lo): {
           if (auto value = ts_tank.value(); value) {
             temp_reg = value.value().value();
             auto temp = std::bit_cast<uint32_t>(temp_reg);
-            regs_copy[0] = temp;
+            reg = temp;
           } else {
             temp_reg = std::numeric_limits<float>::quiet_NaN();
           }
@@ -356,46 +352,46 @@ int main(void) {
         } break;
         case static_cast<uint16_t>(Regmap::Ntc_1_hi): {
           auto value = std::bit_cast<uint32_t>(temp_reg);
-          regs_copy[0] = value >> 16;
+          reg = value >> 16;
         } break;
 
         case static_cast<uint16_t>(Regmap::Ntc_2_lo): {
           if (auto value = ts_steam_room.value(); value) {
             temp_reg = value.value().value();
             auto temp = std::bit_cast<uint32_t>(temp_reg);
-            regs_copy[0] = temp;
+            reg = temp;
           } else {
             temp_reg = std::numeric_limits<float>::quiet_NaN();
           }
         } break;
         case static_cast<uint16_t>(Regmap::Ntc_2_hi): {
           auto value = std::bit_cast<uint32_t>(temp_reg);
-          regs_copy[0] = value >> 16;
+          reg = value >> 16;
         } break;
 
         case static_cast<uint16_t>(Regmap::Ntc_3_lo): {
           if (auto value = ts_ntc_3.value(); value) {
             temp_reg = value.value().value();
             auto temp = std::bit_cast<uint32_t>(temp_reg);
-            regs_copy[0] = temp;
+            reg = temp;
           } else {
             temp_reg = std::numeric_limits<float>::quiet_NaN();
           }
         } break;
         case static_cast<uint16_t>(Regmap::Ntc_3_hi): {
           auto value = std::bit_cast<uint32_t>(temp_reg);
-          regs_copy[0] = value >> 16;
+          reg = value >> 16;
         } break;
 
         case static_cast<uint16_t>(Regmap::WaterLevelCapSense): {
-          regs_copy[0] = 0;
+          reg = 0;
         } break;
 
         default:
           return m::ModbusRtuProtocol<Us<uint32_t>>::Error::IllegalDataAddress;
           break;
       }
-      regs_copy = regs_copy.subspan(1);
+      ++start_addr;
     }
 
     return std::nullopt;
@@ -408,63 +404,61 @@ int main(void) {
   m::ModbusRtuProtocol<Us<uint32_t>>::WMHR_Cb wmhr_cb =
       [&](uint16_t start_addr, uint16_t regs_num, std::span<uint16_t> regs)
       -> std::optional<m::ModbusRtuProtocol<Us<uint32_t>>::Error> {
-    auto regs_copy = regs;
-
-    for (auto address = start_addr; address < start_addr + regs_num;
-         ++address) {
-      auto reg_value = regs_copy[0];
-
-      switch (address) {
+    for (auto& reg : regs) {
+      switch (start_addr) {
         case static_cast<uint16_t>(Regmap::Rel_1): {
           if (el_low.read()) {
-            rel_1.write(reg_value);
+            rel_1.write(reg);
           } else {
-            if (reg_value == 0) {
-              rel_1.write(reg_value);
+            if (reg == 0) {
+              rel_1.write(reg);
             }
           }
         } break;
         case static_cast<uint16_t>(Regmap::Rel_2): {
-          rel_2.write(reg_value);
+          rel_2.write(reg);
         } break;
         case static_cast<uint16_t>(Regmap::Rel_3): {
-          rel_3.write(reg_value);
+          rel_3.write(reg);
         } break;
         case static_cast<uint16_t>(Regmap::Rel_4): {
-          rel_4.write(reg_value);
+          rel_4.write(reg);
         } break;
         case static_cast<uint16_t>(Regmap::Rel_5): {
-          rel_5.write(reg_value);
+          rel_5.write(reg);
         } break;
         case static_cast<uint16_t>(Regmap::Rel_6): {
-          rel_6.write(reg_value);
+          rel_6.write(reg);
         } break;
         case static_cast<uint16_t>(Regmap::Rel_7): {
-          rel_7.write(reg_value);
+          rel_7.write(reg);
         } break;
         case static_cast<uint16_t>(Regmap::Rel_8): {
-          rel_8.write(reg_value);
+          rel_8.write(reg);
         } break;
 
         case static_cast<uint16_t>(Regmap::Out_1): {
-          out_1.write(regs_copy[0]);
+          out_1.write(reg);
         } break;
         case static_cast<uint16_t>(Regmap::Out_2): {
-          out_2.write(regs_copy[0]);
+          out_2.write(reg);
         } break;
 
         default:
           return m::ModbusRtuProtocol<Us<uint32_t>>::Error::IllegalDataAddress;
           break;
       }
-      regs_copy = regs_copy.subspan(1);
+      ++start_addr;
     }
 
     return std::nullopt;
   };
 
-  modbus_callbacks.rmhr_cb = &rmhr_cb;
-  modbus_callbacks.wmhr_cb = &wmhr_cb;
+  mdbs_sh.addReadMultipleHoldingRegistersCallback(rmhr_cb);
+  mdbs_sh.addWriteMultipleHoldingRegistersCallback(wmhr_cb);
+
+  mdbs_p.addReadMultipleHoldingRegistersCallback(rmhr_cb);
+  mdbs_p.addWriteMultipleHoldingRegistersCallback(wmhr_cb);
 
   // ##################################################
   //                      RUN
