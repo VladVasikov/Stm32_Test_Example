@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Fsm.h>
-#include <Timer.h>
+#include <Fsm.hpp>
+#include <Timer.hpp>
 
-#include "Drivers.h"
-#include "Settings.h"
+#include "Drivers.hpp"
+#include "Settings.hpp"
 
 class Startup_S final : public m::IState {
  public:

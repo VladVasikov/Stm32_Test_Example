@@ -1,5 +1,5 @@
 #pragma once
-#include <IIO_Sync.h>
+#include <IIO_Sync.hpp>
 
 #include "i2c.h"
 

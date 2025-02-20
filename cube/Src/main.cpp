@@ -30,30 +30,30 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <IIO_AsyncLog.h>
-#include <MemoryPart.h>
-#include <MemoryTest.h>
-#include <PY25Q128HA.h>
-#include <Pin_F4_Wrapper.h>
-#include <SimpleErrorTracer.h>
-#include <Time_F4_Tim5.h>
-#include <Units.h>
+#include <IIO_AsyncLog.hpp>
+#include <MemoryPart.hpp>
+#include <MemoryTest.hpp>
+#include <ModbusRtuProtocol.hpp>
+#include <PY25Q128HA.hpp>
+#include <Pin_F4_Wrapper.hpp>
+#include <SimpleErrorTracer.hpp>
+#include <Time_F4_Tim5.hpp>
+#include <Units.hpp>
 
-#include "Adc_1.h"
-#include "Drivers.h"
-#include "Error.h"
-#include "I2c_1.h"
-#include "Machine.h"
-#include "ModbusRtuProtocol.h"
-#include "Regmap.h"
-#include "Settings.h"
-#include "Spi_1.h"
-#include "TempSense.h"
-#include "Tim_6_10Hz.h"
-#include "Tim_7_1KHz.h"
-#include "Usart_1.h"
-#include "Usart_4.h"
-#include "Usart_5.h"
+#include "Adc_1.hpp"
+#include "Drivers.hpp"
+#include "Error.hpp"
+#include "I2c_1.hpp"
+#include "Machine.hpp"
+#include "Regmap.hpp"
+#include "Settings.hpp"
+#include "Spi_1.hpp"
+#include "TempSense.hpp"
+#include "Tim_6_10Hz.hpp"
+#include "Tim_7_1KHz.hpp"
+#include "Usart_1.hpp"
+#include "Usart_4.hpp"
+#include "Usart_5.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

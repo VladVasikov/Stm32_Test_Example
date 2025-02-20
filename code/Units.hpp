@@ -1,8 +1,8 @@
 
 #pragma once
-#include <Celsius.h>
-#include <Ms.h>
-#include <Us.h>
+#include <Celsius.hpp>
+#include <Ms.hpp>
+#include <Us.hpp>
 
 inline constexpr Celsius<float> operator""_C(unsigned long long value) {
   return Celsius<float>(static_cast<float>(value));

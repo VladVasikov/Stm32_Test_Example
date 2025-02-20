@@ -1,12 +1,12 @@
 #pragma once
-#include <Fsm.h>
-#include <IErrorTracer.h>
-#include <ILog.h>
+#include <Fsm.hpp>
+#include <IErrorTracer.hpp>
+#include <ILog.hpp>
 
-#include "Drivers.h"
-#include "Error_S.h"
-#include "Settings.h"
-#include "Startup_S.h"
+#include "Drivers.hpp"
+#include "Error_S.hpp"
+#include "Settings.hpp"
+#include "Startup_S.hpp"
 
 class Machine {
  public:

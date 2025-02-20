@@ -1,5 +1,5 @@
 #pragma once
-#include <IAdcDmaCircularReader.h>
+#include <IAdcDmaCircularReader.hpp>
 
 #include "adc.h"
 #include "tim.h"

@@ -1,6 +1,6 @@
 #pragma once
-#include <IIO_Async.h>
-#include <IPin.h>
+#include <IIO_Async.hpp>
+#include <IPin.hpp>
 
 #include "usart.h"
 

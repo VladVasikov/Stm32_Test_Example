@@ -1,9 +1,9 @@
 #pragma once
-#include <B57861S0103F045.h>
+#include <B57861S0103F045.hpp>
 
 #include <optional>
 
-#include "ITempSenseWithError.h"
+#include "ITempSenseWithError.hpp"
 
 class Ntc final : public ITempSenseWithError {
  public:

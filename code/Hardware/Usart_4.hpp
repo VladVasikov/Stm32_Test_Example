@@ -1,18 +1,18 @@
 #pragma once
-#include <IIO_Async.h>
-#include <IPin.h>
+#include <IIO_Async.hpp>
+#include <IPin.hpp>
 
 #include "usart.h"
 
-class Usart_1 final : public m::ifc::IIO_Async {
+class Usart_4 final : public m::ifc::IIO_Async {
  public:
-  Usart_1(m::ifc::mcu::IPin& dr_en) : dr_en_(dr_en) {}
+  Usart_4(m::ifc::mcu::IPin& dr_en) : dr_en_(dr_en) {}
 
-  uint32_t bytesToWrite() override { return huart1.hdmatx->Instance->NDTR; }
+  uint32_t bytesToWrite() override { return huart4.hdmatx->Instance->NDTR; }
 
   bool writeAsync(std::span<uint8_t const> data) override {
     dr_en_.write(1);
-    auto res = (HAL_UART_Transmit_DMA(&huart1, (uint8_t*)data.data(),
+    auto res = (HAL_UART_Transmit_DMA(&huart4, (uint8_t*)data.data(),
                                       data.size()) == HAL_OK);
     if (res) {
       dma_tx_started_ = true;
@@ -22,7 +22,7 @@ class Usart_1 final : public m::ifc::IIO_Async {
 
   bool abortWrite() override {
     if (!dma_tx_started_) return true;
-    auto res = (HAL_UART_AbortTransmit(&huart1) == HAL_OK);
+    auto res = (HAL_UART_AbortTransmit(&huart4) == HAL_OK);
     if (res) {
       dma_tx_started_ = false;
     }
@@ -33,7 +33,7 @@ class Usart_1 final : public m::ifc::IIO_Async {
   bool writeDone() override {
     if (dma_tx_started_) {
       if (bytesToWrite() == 0) {
-        if (HAL_UART_GetState(&huart1) == HAL_UART_STATE_READY) {
+        if (HAL_UART_GetState(&huart4) == HAL_UART_STATE_READY) {
           dma_tx_started_ = false;
           return true;
         } else {
@@ -46,12 +46,12 @@ class Usart_1 final : public m::ifc::IIO_Async {
   }
 
   uint32_t bytesAvailable() override {
-    return rx_size_ - huart1.hdmarx->Instance->NDTR;
+    return rx_size_ - huart4.hdmarx->Instance->NDTR;
   }
 
   bool readAsync(std::span<uint8_t> data) override {
     dr_en_.write(0);
-    bool res = (HAL_UART_Receive_DMA(&huart1, (uint8_t*)data.data(),
+    bool res = (HAL_UART_Receive_DMA(&huart4, (uint8_t*)data.data(),
                                      data.size()) == HAL_OK);
     if (res) {
       dma_rx_started_ = true;
@@ -62,7 +62,7 @@ class Usart_1 final : public m::ifc::IIO_Async {
 
   bool abortRead() override {
     if (!dma_rx_started_) return true;
-    auto res = (HAL_UART_AbortReceive(&huart1) == HAL_OK);
+    auto res = (HAL_UART_AbortReceive(&huart4) == HAL_OK);
     if (res) {
       dma_rx_started_ = false;
     }
@@ -74,7 +74,7 @@ class Usart_1 final : public m::ifc::IIO_Async {
     if (dma_rx_started_) {
       if (bytesAvailable() == rx_size_) {
         if (abortRead()) {
-          if (HAL_UART_GetState(&huart1) == HAL_UART_STATE_READY) {
+          if (HAL_UART_GetState(&huart4) == HAL_UART_STATE_READY) {
             return true;
           }
         }
@@ -84,12 +84,12 @@ class Usart_1 final : public m::ifc::IIO_Async {
     return true;
   }
 
-  uint32_t getBaudrate() override { return 921'600 / 10; }
+  uint32_t getBaudrate() override { return 115'200 / 10; }
 
   bool setBaudrate(uint32_t baud) override { return false; }
 
   bool error() override {
-    return HAL_UART_GetError(&huart1) != HAL_UART_ERROR_NONE;
+    return HAL_UART_GetError(&huart4) != HAL_UART_ERROR_NONE;
   }
 
  private:

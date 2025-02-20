@@ -1,6 +1,6 @@
 #pragma once
-#include <Celsius.h>
-#include <ITempSense.h>
+#include <Celsius.hpp>
+#include <ITempSense.hpp>
 
 #include <optional>
 

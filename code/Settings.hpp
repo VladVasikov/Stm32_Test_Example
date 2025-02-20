@@ -1,10 +1,10 @@
 #pragma once
 
-#include <HashFAQ6.h>
-#include <IMemory.h>
-#include <Timer.h>
+#include <HashFAQ6.hpp>
+#include <IMemory.hpp>
+#include <Timer.hpp>
 
-#include "Error.h"
+#include "Error.hpp"
 
 class Settings {
  public:

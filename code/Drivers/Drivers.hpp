@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Celsius.h>
-#include <IPin.h>
-#include <ITime.h>
+#include <Celsius.hpp>
+#include <IPin.hpp>
+#include <ITime.hpp>
 
-#include "ITempSenseWithError.h"
+#include "ITempSenseWithError.hpp"
 
 class Drivers {
  public:

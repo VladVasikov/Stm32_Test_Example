@@ -1,7 +1,7 @@
 #pragma once
-#include <IIO_Sync.h>
-#include <IPin.h>
-#include <Timeout.h>
+#include <IIO_Sync.hpp>
+#include <IPin.hpp>
+#include <Timeout.hpp>
 
 #include "spi.h"
 
