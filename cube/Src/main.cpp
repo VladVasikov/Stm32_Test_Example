@@ -198,9 +198,9 @@ int main(void) {
   // ##################################################
 
   PinWrapper in_1{GPIOA, Pin::PinNum::Pin_11, Pin::Mode::Input,
-                  Pin::Inversion::Inverted};  // remote control
+                  Pin::Inversion::Inverted};
   PinWrapper in_2{GPIOA, Pin::PinNum::Pin_10, Pin::Mode::Input,
-                  Pin::Inversion::Inverted};  // door
+                  Pin::Inversion::Inverted};
   PinWrapper in_3{GPIOA, Pin::PinNum::Pin_9, Pin::Mode::Input,
                   Pin::Inversion::Inverted};
   PinWrapper in_4{GPIOA, Pin::PinNum::Pin_8, Pin::Mode::Input,

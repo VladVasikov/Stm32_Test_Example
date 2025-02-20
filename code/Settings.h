@@ -67,10 +67,18 @@ class Settings {
   }
 
   bool save() {
+    changes_ = false;
+
+    Data data_copy;
+    data_copy = data_;
+
     auto temp = hash_.calc(std::span<uint8_t const>{
-        (uint8_t *)&data_, sizeof(Data) - hash_.size()});
-    data_.hash = temp[0] | (temp[1] << 8) | (temp[2] << 16) | (temp[3] << 24);
-    return mem_.write(0, std::span<uint8_t>{(uint8_t *)&data_, sizeof(Data)});
+        reinterpret_cast<uint8_t *>(&data_copy), sizeof(Data) - hash_.size()});
+    data_copy.hash =
+        temp[0] | (temp[1] << 8) | (temp[2] << 16) | (temp[3] << 24);
+    return mem_.write(
+        0, std::span<uint8_t>{reinterpret_cast<uint8_t *>(&data_copy),
+                              sizeof(Data)});
   }
 
   void handle() {
@@ -80,7 +88,6 @@ class Settings {
           tracer_.add(static_cast<uint16_t>(HardwareError::Write_Mem));
           log_.add("Save settings err");
         }
-        changes_ = false;
       }
     }
   }
