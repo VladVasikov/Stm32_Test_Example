@@ -59,7 +59,7 @@ class Settings {
                                               sizeof(Data) - hash_.size()},
                      hash)) {
       tracer_.add(static_cast<uint16_t>(HardwareError::Mem_Bad_Hash));
-      log_.add("Settings bad err");
+      log_.add("Settings bad hash err");
       return false;
     }
 
@@ -69,7 +69,7 @@ class Settings {
   bool save() {
     changes_ = false;
 
-    Data data_copy;
+    alignas(4) Data data_copy;
     data_copy = data_;
 
     auto temp = hash_.calc(std::span<uint8_t const>{
