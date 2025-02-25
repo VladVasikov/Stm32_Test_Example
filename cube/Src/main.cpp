@@ -39,6 +39,7 @@
 #include <SimpleErrorTracer.hpp>
 #include <Time_F4_Tim5.hpp>
 #include <Units.hpp>
+#include <algorithm>
 
 #include "Adc_1.hpp"
 #include "Drivers.hpp"
