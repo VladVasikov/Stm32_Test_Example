@@ -13,21 +13,28 @@ inline std::span<volatile uint16_t> Adc_1_data_;
 
 class Adc_1 final : public m::ifc::mcu::IAdcDmaCircularReader<uint16_t> {
  public:
-  Adc_1(const std::function<void(std::span<volatile uint16_t> first_half)>
-            &half_conv_cb,
-        const std::function<void(std::span<volatile uint16_t> second_half)>
-            &conv_cb)
-      : IAdcDmaCircularReader(half_conv_cb, conv_cb) {
-    Adc_1_half_conv_cb_ = &half_conv_cb;
-    Adc_1_conv_cb_ = &conv_cb;
-
+  Adc_1() {
+    Adc_1_half_conv_cb_ = &first_half_cb_;
+    Adc_1_conv_cb_ = &second_half_cb_;
     hadc1.ConvHalfCpltCallback = [](ADC_HandleTypeDef *hadc) {
-      (*Adc_1_half_conv_cb_)(Adc_1_data_.first(Adc_1_data_.size() / 2));
+      if (*Adc_1_half_conv_cb_)
+        (*Adc_1_half_conv_cb_)(Adc_1_data_.first(Adc_1_data_.size() / 2));
     };
     hadc1.ConvCpltCallback = [](ADC_HandleTypeDef *hadc) {
-      (*Adc_1_conv_cb_)(
-          Adc_1_data_.last(Adc_1_data_.size() - Adc_1_data_.size() / 2));
+      if (*Adc_1_conv_cb_)
+        (*Adc_1_conv_cb_)(
+            Adc_1_data_.last(Adc_1_data_.size() - Adc_1_data_.size() / 2));
     };
+  }
+
+  void setHalfConversionCallback(
+      std::function<void(std::span<volatile type>)> &&first_half_cb) override {
+    first_half_cb_ = std::move(first_half_cb);
+  }
+
+  void setFullConversionCallback(
+      std::function<void(std::span<volatile type>)> &&second_half_cb) override {
+    second_half_cb_ = std::move(second_half_cb);
   }
 
   bool start(std::span<volatile uint16_t> data) override {
@@ -61,4 +68,7 @@ class Adc_1 final : public m::ifc::mcu::IAdcDmaCircularReader<uint16_t> {
 
  private:
   bool running_ = false;
+
+  std::function<void(std::span<volatile type>)> first_half_cb_;
+  std::function<void(std::span<volatile type>)> second_half_cb_;
 };

@@ -169,7 +169,9 @@ int main(void) {
         }
       };
 
-  Adc_1 adc_1{adc_cb, adc_cb};
+  Adc_1 adc_1;
+  adc_1.setHalfConversionCallback(std::move(adc_cb));
+  adc_1.setFullConversionCallback(std::move(adc_cb));
 
   Ntc ts_tank{adc_filtered[0]};
   Ntc ts_steam_room{adc_filtered[1]};
@@ -455,11 +457,11 @@ int main(void) {
     return std::nullopt;
   };
 
-  mdbs_sh.addReadMultipleHoldingRegistersCallback(rmhr_cb);
-  mdbs_sh.addWriteMultipleHoldingRegistersCallback(wmhr_cb);
+  mdbs_sh.addReadMultipleHoldingRegistersCallback(std::move(rmhr_cb));
+  mdbs_sh.addWriteMultipleHoldingRegistersCallback(std::move(wmhr_cb));
 
-  mdbs_p.addReadMultipleHoldingRegistersCallback(rmhr_cb);
-  mdbs_p.addWriteMultipleHoldingRegistersCallback(wmhr_cb);
+  mdbs_p.addReadMultipleHoldingRegistersCallback(std::move(rmhr_cb));
+  mdbs_p.addWriteMultipleHoldingRegistersCallback(std::move(wmhr_cb));
 
   // ##################################################
   //                      RUN
@@ -490,7 +492,8 @@ int main(void) {
     mdbs_sh.handle();
     mdbs_p.handle();
   };
-  Tim_7_1kHz tim_7_it{tim_7_it_cb};
+  Tim_7_1kHz tim_7_it;
+  tim_7_it.setCallback(std::move(tim_7_it_cb));
   tim_7_it.start();
 
   Drivers drivers{time_us, time_ms, ts_tank, ts_steam_room, ts_ntc_3, in_1,

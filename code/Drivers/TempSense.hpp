@@ -1,6 +1,5 @@
 #pragma once
 #include <B57861S0103F045.hpp>
-
 #include <optional>
 
 #include "ITempSenseWithError.hpp"
@@ -19,9 +18,9 @@ class Ntc final : public ITempSenseWithError {
     return Celsius<float>{temp};
   }
 
-  bool isShort() override { return data_ < Short_Threshold; }
+  bool shorted() override { return data_ < Short_Threshold; }
 
-  bool isBreak() override { return data_ > Break_Threshold; }
+  bool broken() override { return data_ > Break_Threshold; }
 
   std::optional<Celsius<float>> min() override { return min_; }
 

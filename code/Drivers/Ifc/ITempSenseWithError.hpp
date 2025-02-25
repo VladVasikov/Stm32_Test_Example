@@ -1,7 +1,6 @@
 #pragma once
 #include <Celsius.hpp>
 #include <ITempSense.hpp>
-
 #include <optional>
 
 class ITempSenseWithError
@@ -10,7 +9,7 @@ class ITempSenseWithError
  public:
   virtual std::optional<Celsius<float>> value() = 0;
 
-  virtual bool isShort() = 0;
+  virtual bool shorted() = 0;
 
-  virtual bool isBreak() = 0;
+  virtual bool broken() = 0;
 };
