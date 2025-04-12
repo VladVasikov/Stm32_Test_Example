@@ -462,7 +462,19 @@ int main(void) {
 
   mdbs_p.addReadMultipleHoldingRegistersCallback(std::move(rmhr_cb));
   mdbs_p.addWriteMultipleHoldingRegistersCallback(std::move(wmhr_cb));
+ // ##################################################
 
+  // ##################################################
+/*std::function<void()> generator_cb = [&]() {
+    generator.togl();    
+  };  
+generator.setCallback(std::move(generator_cb));*/
+  
+Generator generator(&htim1);  
+std::array<Packet,3> signal{{{7, 10},{5, 200},{4, 2000}}};
+generator.add(signal); 
+generator.start();
+  
   // ##################################################
   //                      RUN
   // ##################################################
